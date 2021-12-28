@@ -5,6 +5,34 @@ import { Button, Input } from 'react-native-elements';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 function SignupScreen({navigation}){
+ const [email,setemail]=React.useState('');
+const [password,setpassword]=React.useState('');
+const [name,setname]=React.useState('');
+
+const firebase_endpoint="https://medplus-976c3-default-rtdb.asia-southeast1.firebasedatabase.app/";
+
+const RegisterUser=()=>{
+  var requestOptions = {
+      method: 'POST',
+      body: JSON.stringify({
+        name: name,
+        email: email,
+        password: password,
+      }),
+    };
+
+    fetch(`${firebase_endpoint}/Users.json`, requestOptions)
+      .then((response) => response.json())
+      .then((result) =>{
+       console.log(result)
+       alert("Sucessfully registered")
+       navigation.navigate('Login')
+       })
+      .catch((error) => console.log('error', error));
+  };
+
+
+
 
     return (
         <View style={styles.container}>
@@ -14,27 +42,27 @@ function SignupScreen({navigation}){
             <Text style={styles.mediPlus}>
             MediPlus
             </Text>
-         <Text style={{textAlign:"center",fontWeight:"bold",marginBottom:40}}>Where your health comes first!</Text>
+         <Text style={{textAlign:"center",fontWeight:"bold",marginBottom:40}}>Where your  health comes first!</Text>
          <TextInput style={styles.textinput}
          placeholder="Name"
-        // value={}
-         //onChangeText={} 
+         value={name}
+          onChangeText={val=>setname(val)}
           />
           <TextInput style={styles.textinput}
          placeholder="Email"
-        // value={}
-         //onChangeText={} 
+         value={email}
+              onChangeText={val=>setemail(val)}
           />
           <TextInput style={styles.textinput}
          placeholder="Password"
-        // value={}
-         //onChangeText={} 
+         value={password}
+              onChangeText={val=>setpassword(val)}
           />
           <Button
               icon={<Icon name="check" size={15} color="white" />}
               title="Sign Up"
               buttonStyle={styles.buttonStyle}
-             // onPress={() => event(false)}
+              onPress={() => RegisterUser()}
             />
         </View>
       );
@@ -73,4 +101,4 @@ function SignupScreen({navigation}){
                 alignContent: 'center',
      },
     });
-export default SignupScreen;    
+export default SignupScreen

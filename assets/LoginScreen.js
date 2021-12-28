@@ -5,9 +5,42 @@ import { createStackNavigator } from '@react-navigation/stack';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { Button, Input } from 'react-native-elements';
 import { NavigationContainer } from '@react-navigation/native';
+const firebase_endpoint="https://medplus-976c3-default-rtdb.asia-southeast1.firebasedatabase.app/";
+
 
 function LoginScreen({navigation}){
-
+const [email,setemail]=React.useState('');
+const [password,setpassword]=React.useState('');
+const handleLogin=async()=>{
+ const response = await fetch(`${firebase_endpoint}/Users.json`);
+    const data = await response.json();
+    for (var obj in data){ //iterating through all the objects
+     // console.log(data[obj].email);  //getting email of each object
+      var dbemail=data[obj].email.toLowerCase();
+     // console.log(dbemail)
+      var dbpass=data[obj].password.toLowerCase();
+   //   console.log(dbpass)
+   if(dbemail==email.toLowerCase() && dbpass==password.toLowerCase()){
+        // alert("User Logged in successfully")   
+         if(email.toLowerCase()==="admin@gmail.com"){
+           console.log("Show admin Screen")
+        
+         }
+         else{
+           console.log("show user screen")
+            navigation.navigate('Customer')
+         }
+    // console.log("User Logged in successfully")
+  //  alert("User Logged in successfully")
+   }
+   else{
+    console.log("Incorrect email or password.Try again")
+   //  alert("Incorrect email")
+     setemail('');
+     setpassword('')
+   }
+}
+}
     return (
         <View style={styles.container}>
          <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
@@ -22,9 +55,14 @@ function LoginScreen({navigation}){
     
             <Input
               containerStyle={styles.inputStyle}
-              placeholder="Username"
-              leftIcon={<Icon name="user" size={24} color="black" />}
+              placeholder="Email"
+              leftIcon={<Icon name="user" size={24} color="black" 
+              />}
+              value={email}
+              onChangeText={val=>setemail(val)}
+
             />
+            
           </View>
           <View>
             <Input
@@ -32,6 +70,8 @@ function LoginScreen({navigation}){
               placeholder="Password"
               leftIcon={<Icon name="lock" size={18} color="black" />}
               secureTextEntry={true}
+              value={password}
+              onChangeText={val=>setpassword(val)}
             />
           </View>
        
@@ -45,9 +85,22 @@ function LoginScreen({navigation}){
                 backgroundColor: '#00A651',
                 alignContent: 'center',
               }}
-             // onPress={() => event(false)}
+              onPress={() => handleLogin()}
+            />
+          <Button
+              icon={<Icon name="check" size={15} color="white" />}
+              title="Sign Up"
+              buttonStyle={{
+                width: 100,
+                justifyContent: 'center',
+                marginTop: 20,
+                backgroundColor: '#00A651',
+                alignContent: 'center',
+              }}
+              onPress={() => navigation.navigate('Signup')}
             />
           </View>
+
       </View>
       );
     }
