@@ -6,6 +6,7 @@ import SignupScreen from './assets/SignupScreen'
 import CustomerScreen from './assets/Customer'
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
+import Forgotpass from './assets/Forgotpass'
 
 const Stack = createStackNavigator();
 export default function App() {
@@ -15,6 +16,7 @@ export default function App() {
       <Stack.Screen name="Login" component={LoginScreen} />
       <Stack.Screen name="Signup" component={SignupScreen} />
       <Stack.Screen name="Customer" component={CustomerScreen} />
+      <Stack.Screen name="Forgot Password" component={Forgotpass} />
       </Stack.Navigator>
    </NavigationContainer>
   );

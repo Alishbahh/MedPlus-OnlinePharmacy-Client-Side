@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {ScrollView,Image, TouchableOpacity, Text, View, StyleSheet,TextInput } from 'react-native';
+import {ScrollView,Image, TouchableOpacity, Text, View, StyleSheet,TextInput,Pressable } from 'react-native';
 import Constants from 'expo-constants';
 import { createStackNavigator } from '@react-navigation/stack';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -99,6 +99,9 @@ const handleLogin=async()=>{
               }}
               onPress={() => navigation.navigate('Signup')}
             />
+            <Pressable style={{backgroundColor:"grey",color:"white",width:120,marginTop:10}} onPress={()=> navigation.navigate('Forgot Password')}>
+  <Text> Forgot password </Text>
+</Pressable>
           </View>
 
       </View>
@@ -119,10 +122,10 @@ const handleLogin=async()=>{
     //border:"1px solid green",
     borderWidth:2,
     borderColor:'#00A651',
-    marginBottom:25,
+    marginBottom:20,
     width:"80%",
     marginLeft:30,
-    
+    height:50,
     //alignSelf:"center",
     
     //width:174,
