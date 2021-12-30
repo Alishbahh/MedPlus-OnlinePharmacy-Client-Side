@@ -11,6 +11,7 @@ const firebase_endpoint="https://medplus-976c3-default-rtdb.asia-southeast1.fire
 function LoginScreen({navigation}){
 const [email,setemail]=React.useState('');
 const [password,setpassword]=React.useState('');
+const [loggedin,setLoggedin]=React.useState('false');
 const handleLogin=async()=>{
  const response = await fetch(`${firebase_endpoint}/Users.json`);
     const data = await response.json();
@@ -28,7 +29,7 @@ const handleLogin=async()=>{
          }
          else{
            console.log("show user screen")
-            navigation.navigate('Customer')
+           navigation.navigate('Customer',{data:{id:obj, name:data[obj].name, email: email, password: password}
          }
     // console.log("User Logged in successfully")
   //  alert("User Logged in successfully")
