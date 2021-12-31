@@ -2,7 +2,6 @@ import * as React from 'react';
 import {ScrollView,Image, TouchableOpacity, Text, View, StyleSheet,TextInput,Pressable} from 'react-native';
 import Constants from 'expo-constants';
 import { createStackNavigator } from '@react-navigation/stack';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { Button, Input } from 'react-native-elements';
 import { NavigationContainer } from '@react-navigation/native';
@@ -11,33 +10,73 @@ const firebase_endpoint="https://medplus-976c3-default-rtdb.asia-southeast1.fire
 function ConfirmOrder({navigation,route}){
   const[getaddress,setaddress]=React.useState();
   const[getNum,setNum]=React.useState();
-  const[getcart,setcart]=React.useState();
-  const[getprice,setprice]=React.useState();
-  const[getpID,setpID]=React.useState();
-  const[getemail,setemail]=React.useState();
-  const[getname,setname]=React.useState();
-  const[getimage,setimage]=React.useState();
+  const[getcart,setcart]=React.useState([]);
+
+
+
+
   const getData = async () => {
-  const response = await fetch(`${firebase_endpoint}/CART.json`)
+const response = await fetch(`${firebase_endpoint}/CART.json`)
  const data = await response.json();
 
   const userId=route.params.data.customerid; //logged in user
-   for (var obj in data){
-
-     const id= data[obj].customerid 
-    if(userId==id){
-      setname(data[obj].name)
-      setprice(data[obj].price);
-      setpID(data[obj].pID);
-      setimage(data[obj].image)
-    } 
-  }
+   for (var obj in data) {
+      //const name = data[obj].name;
+      const id = data[obj].customerid; //from cart
+      if (userId == id) {
+        setcart((prev) => [
+          ...prev,
+          {
+            name: data[obj].name,
+            price: data[obj].price,
+            image: data[obj].image,
+            pID: data[obj].pID,
+            itemId:obj,
+          },
+        ]);
+        
+      }
+    }
   };
     
+const deletefromcart=()=>{
+
+for(var i=0;i<getcart.length;i++){
+ const id= getcart[i].itemId;
+
+ var requestOptions = {
+      method:'POST',
+      body:JSON.stringify({
+          name: getcart[i].name,
+            price: getcart[i].price,
+            image: getcart[i].image,
+            pID: getcart[i].pID,
+      }),
+    };
+
+    fetch(`${firebase_endpoint}/Store.json`, requestOptions)
+      .then((response) => response.text())
+      .then((result) => console.log(result))
+      .catch((error) => console.log('error', error));
+
+
+  requestOptions = {
+      method: 'DELETE',
+    };
+
+    fetch(`${firebase_endpoint}/CART/${id}.json`, requestOptions)
+      .then((response) => response.text())
+      .then((result) => console.log(result))
+      .catch((error) => console.log('error', error));
+   
+  
+  };
+navigation.navigate('Pharmacy')
+
+}
   React.useEffect(() => {
     getData();
   },[]);
-
 
 
 
@@ -49,17 +88,14 @@ const handlepass=()=>{
         customerid: route.params.data.customerid,
         address: getaddress,
         phoneNo: getNum,
-        pID:getpID,
-        name:getname,
-        price:getprice,
-        image:getimage
+        items: getcart,
       }),
     };
 
     fetch(`${firebase_endpoint}/Orders.json`, requestOptions)
       .then((response) => response.json())
       .then((result) =>{ alert("order placed")
-      navigation.navigate('Pharmacy')
+      
       })
       .catch((error) => console.log('error', error));
   };
@@ -92,7 +128,7 @@ const handlepass=()=>{
               icon={<Icon name="check" size={15} color="white" />}
               title="Confirm Order"
               buttonStyle={styles.buttonStyle}
-             onPress={() => handlepass()}
+             onPress={() => { handlepass(); deletefromcart()  } }
             />
         </View>
 
