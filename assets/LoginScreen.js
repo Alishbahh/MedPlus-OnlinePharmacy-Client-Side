@@ -1,7 +1,8 @@
 import * as React from 'react';
-import {ScrollView,Image, TouchableOpacity, Text, View, StyleSheet,TextInput,Pressable } from 'react-native';
+import {ScrollView,Image, TouchableOpacity, Text, View, StyleSheet,TextInput,Pressable} from 'react-native';
 import Constants from 'expo-constants';
 import { createStackNavigator } from '@react-navigation/stack';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { Button, Input } from 'react-native-elements';
 import { NavigationContainer } from '@react-navigation/native';
@@ -12,6 +13,19 @@ function LoginScreen({navigation}){
 const [email,setemail]=React.useState('');
 const [password,setpassword]=React.useState('');
 const [loggedin,setLoggedin]=React.useState('false');
+
+const storeData = async (value) => {
+    try {
+      var stringdata = JSON.stringify(value);
+   //   console.log("inside Async",stringdata);
+      await AsyncStorage.setItem('LoggedUser', stringdata);
+      console.log('stored');
+   //   alert('saved to favourite');
+    } catch (e) {
+      console.log('not stored');
+    }
+  };
+
 const handleLogin=async()=>{
  const response = await fetch(`${firebase_endpoint}/Users.json`);
     const data = await response.json();
@@ -25,18 +39,28 @@ const handleLogin=async()=>{
         // alert("User Logged in successfully")   
          if(email.toLowerCase()==="admin@gmail.com"){
            console.log("Show admin Screen")
+           setLoggedin(true);
+           break;
         
          }
          else{
-           console.log("show user screen")
-           navigation.navigate('Customer',{data:{id:obj, name:data[obj].name, email: email, password: password}
+          console.log("show user screen")
+             setLoggedin(true);
+            var name=data[obj].name;
+            var id=obj;
+
+         //    console.log(data[obj])
+         // storeData(data[obj])
+            navigation.navigate('Pharmacy',{data:{id:obj, name:name, email: email, password: password}})
+
+            break;
          }
     // console.log("User Logged in successfully")
   //  alert("User Logged in successfully")
    }
    else{
-    console.log("Incorrect email or password.Try again")
-   //  alert("Incorrect email")
+   // console.log("Incorrect email or password.Try again")
+   // alert("Incorrect email/password")
      setemail('');
      setpassword('')
    }
@@ -100,7 +124,7 @@ const handleLogin=async()=>{
               }}
               onPress={() => navigation.navigate('Signup')}
             />
-            <Pressable style={{backgroundColor:"grey",color:"white",width:120,marginTop:10}} onPress={()=> navigation.navigate('Forgot Password')}>
+             <Pressable style={{backgroundColor:"grey",color:"white",width:120,marginTop:10}} onPress={()=> navigation.navigate('Forgot Password')}>
   <Text> Forgot password </Text>
 </Pressable>
           </View>
@@ -125,8 +149,9 @@ const handleLogin=async()=>{
     borderColor:'#00A651',
     marginBottom:20,
     width:"80%",
-    marginLeft:30,
     height:50,
+    marginLeft:30,
+    
     //alignSelf:"center",
     
     //width:174,
