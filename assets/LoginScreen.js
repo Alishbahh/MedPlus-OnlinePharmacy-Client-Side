@@ -1,8 +1,7 @@
 import * as React from 'react';
-import {ScrollView,Image, TouchableOpacity, Text, View, StyleSheet,TextInput,Pressable} from 'react-native';
+import {ScrollView, TouchableOpacity, Text, View, StyleSheet,TextInput,Pressable,ImageBackground} from 'react-native';
 import Constants from 'expo-constants';
 import { createStackNavigator } from '@react-navigation/stack';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { Button, Input } from 'react-native-elements';
 import { NavigationContainer } from '@react-navigation/native';
@@ -14,17 +13,6 @@ const [email,setemail]=React.useState('');
 const [password,setpassword]=React.useState('');
 const [loggedin,setLoggedin]=React.useState('false');
 
-const storeData = async (value) => {
-    try {
-      var stringdata = JSON.stringify(value);
-   //   console.log("inside Async",stringdata);
-      await AsyncStorage.setItem('LoggedUser', stringdata);
-      console.log('stored');
-   //   alert('saved to favourite');
-    } catch (e) {
-      console.log('not stored');
-    }
-  };
 
 const handleLogin=async()=>{
  const response = await fetch(`${firebase_endpoint}/Users.json`);
@@ -68,6 +56,7 @@ const handleLogin=async()=>{
 }
     return (
         <View style={styles.container}>
+       
          <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
             <Icon name="plus" size={66} color='#00A651'/>
             </View>

@@ -44,7 +44,12 @@ function Forgotpass({navigation}){
 
     fetch(`${firebase_endpoint}/Users/${id}.json`, requestOptions)
       .then((response) => response.json())
-      .then((result) => console.log(result))
+      .then((result) =>{ console.log(result)
+      alert("password updated")
+      setemail(''),
+      setnewpassword('')
+      }
+      )
       .catch((error) => console.log('error', error));
   };
   
@@ -93,6 +98,8 @@ function Forgotpass({navigation}){
           justifyContent:"center",
           fontSize:34,
           fontWeight:"bold"
+    
+
     
       },
       textinput:{

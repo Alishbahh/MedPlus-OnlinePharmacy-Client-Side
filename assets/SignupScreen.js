@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Text, View, StyleSheet,TextInput } from 'react-native';
+import { Text, View, StyleSheet,TextInput,ImageBackground } from 'react-native';
 import Constants from 'expo-constants';
 import { Button, Input } from 'react-native-elements';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -36,6 +36,7 @@ const RegisterUser=()=>{
 
     return (
         <View style={styles.container}>
+         
          <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
             <Icon name="plus" size={66} color='#00A651'/>
             </View>
@@ -64,6 +65,7 @@ const RegisterUser=()=>{
               buttonStyle={styles.buttonStyle}
               onPress={() => RegisterUser()}
             />
+        
         </View>
       );
     }

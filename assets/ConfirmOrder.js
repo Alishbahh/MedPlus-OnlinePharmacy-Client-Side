@@ -51,6 +51,9 @@ for(var i=0;i<getcart.length;i++){
             price: getcart[i].price,
             image: getcart[i].image,
             pID: getcart[i].pID,
+            customeremail: route.params.data.customeremail,
+            address: getaddress,
+           phoneNo: getNum,
       }),
     };
 
@@ -68,10 +71,10 @@ for(var i=0;i<getcart.length;i++){
       .then((response) => response.text())
       .then((result) => console.log(result))
       .catch((error) => console.log('error', error));
-   
+       navigation.navigate('Cart')
   
   };
-navigation.navigate('Pharmacy')
+
 
 }
   React.useEffect(() => {
@@ -95,6 +98,7 @@ const handlepass=()=>{
     fetch(`${firebase_endpoint}/Orders.json`, requestOptions)
       .then((response) => response.json())
       .then((result) =>{ alert("order placed")
+      //  navigation.navigate('Cart')
       
       })
       .catch((error) => console.log('error', error));
