@@ -10,10 +10,9 @@ import ConfirmOrder from  './assets/ConfirmOrder'
 import Profile from './assets/Profile'
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import { createDrawerNavigator } from '@react-navigation/drawer';
+
 
 const Stack = createStackNavigator();
-const Drawer = createDrawerNavigator();
 
 export default function App(){
   return (
@@ -37,16 +36,7 @@ export default function App(){
 }
 
 
-const CustomerDrawer = () => {
-  return(
 
-      <Drawer.Navigator>
-        <Drawer.Screen name="Cart"  />
-        <Drawer.Screen name="Profile" />
-      </Drawer.Navigator>
-  
-  );
-}
 
 const styles = StyleSheet.create({
   container: {
